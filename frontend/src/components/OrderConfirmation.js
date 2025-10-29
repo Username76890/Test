@@ -19,11 +19,18 @@ const OrderConfirmation = ({ order }) => {
   }, [currentOrder]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-background">
-      <h2 className="text-3xl font-bold mb-4 text-text">Order Placed! 🎉</h2>
-      <p className="text-lg mb-8 text-text">Your order ID is: {currentOrder.id}</p>
-      <p className="text-text">Estimated waiting time: 10 minutes</p>
-      <p className="mt-4 text-xl text-text">Status: <span className="font-bold text-primary">{currentOrder.status}</span></p>
+    <div className="flex flex-col items-center justify-center h-screen bg-secondary">
+      <div className="bg-white p-8 rounded-2xl shadow-lg text-center max-w-sm">
+        <h2 className="text-3xl font-bold mb-2 text-primary">Order Confirmed!</h2>
+        <p className="text-5xl mb-4">🎉</p>
+        <p className="text-text-dark mb-2">Your order is being prepared.</p>
+        <p className="text-gray-500 text-sm mb-4">Order ID: {currentOrder.id}</p>
+        <div className="border-t border-gray-200 pt-4">
+          <p className="text-lg font-semibold text-text-dark">
+            Status: <span className="text-primary">{currentOrder.status}</span>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import ChatPanel from './ChatPanel';
 
 const VoiceInteraction = ({ setTranscript }) => {
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [language, setLanguage] = useState('en-US');
+  const [localTranscript, setLocalTranscript] = useState('');
 
   const startRecording = () => {
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
@@ -11,6 +13,7 @@ const VoiceInteraction = ({ setTranscript }) => {
       setMediaRecorder(recorder);
       recorder.start();
       setRecording(true);
+      setLocalTranscript('Listening...');
     });
   };
 
@@ -35,24 +38,19 @@ const VoiceInteraction = ({ setTranscript }) => {
       .then((res) => res.json())
       .then((data) => {
         setTranscript(data.transcript);
+        setLocalTranscript(data.transcript);
       });
   };
 
   return (
-    <div>
-      <p>Microphone: {recording ? 'on' : 'off'}</p>
-      <select value={language} onChange={(e) => setLanguage(e.target.value)} className="p-2 border rounded">
-        <option value="en-US">English</option>
-        <option value="hi-IN">Hindi</option>
-        <option value="ml-IN">Malayalam</option>
-      </select>
-      <button onClick={startRecording} disabled={recording}>
-        Start Recording
-      </button>
-      <button onClick={stopRecording} disabled={!recording}>
-        Stop Recording
-      </button>
-    </div>
+    <ChatPanel
+      transcript={localTranscript}
+      isListening={recording}
+      startRecording={startRecording}
+      stopRecording={stopRecording}
+      language={language}
+      setLanguage={setLanguage}
+    />
   );
 };
 
