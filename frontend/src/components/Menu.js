@@ -3,22 +3,23 @@ import { menuItems } from '../menuData';
 
 const Menu = ({ addToCart }) => {
   return (
-    <div className="container mx-auto p-4 bg-background">
-      <h2 className="text-3xl font-bold mb-4 text-text">Menu</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="container mx-auto p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {menuItems.map((item) => (
-          <div key={item.id} className="border rounded-lg p-4 bg-white shadow-md">
-            <img src={item.image} alt={item.name} className="w-full h-48 object-cover mb-4 rounded-md" />
-            <div className="flex justify-between items-center">
-              <h3 className="text-xl font-semibold text-text">{item.name}</h3>
-              <p className="text-lg text-text">${item.price.toFixed(2)}</p>
+          <div key={item.id} className="bg-white rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+            <img src={item.image} alt={item.name} className="w-full h-48 object-cover" />
+            <div className="p-4">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-xl font-semibold text-text-dark">{item.name}</h3>
+                <p className="text-lg font-semibold text-mocha">${item.price.toFixed(2)}</p>
+              </div>
+              <button
+                onClick={() => addToCart(item)}
+                className="w-full mt-2 bg-primary hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300"
+              >
+                Add to Cart
+              </button>
             </div>
-            <button
-              onClick={() => addToCart(item)}
-              className="mt-4 bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-            >
-              Add to Cart
-            </button>
           </div>
         ))}
       </div>

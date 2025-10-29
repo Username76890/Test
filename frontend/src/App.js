@@ -7,20 +7,22 @@ import Cart from './components/Cart';
 import OrderConfirmation from './components/OrderConfirmation';
 import VoiceInteraction from './components/VoiceInteraction';
 import AdminDashboard from './components/AdminDashboard';
+import RobotFace from './components/RobotFace';
 import { menuItems } from './menuData';
 
 const socket = io('http://localhost:3001');
 
 function App() {
-  const [step, setStep] = useState('landing'); // landing, ordering, confirmed
+  const [step, setStep]_useState('landing'); // landing, ordering, confirmed
   const [cart, setCart] = useState([]);
   const [order, setOrder] = useState(null);
   const [transcript, setTranscript] = useState('');
+  const [isListening, setIsListening] = useState(false);
 
 
   useEffect(() => {
     socket.on('order_status_update', (updatedOrder) => {
-      if (order && order._id === updatedOrder._id) {
+      if (order && order.id === updatedOrder.id) {
         setOrder(updatedOrder);
       }
     });
@@ -31,11 +33,19 @@ function App() {
   }, [order]);
 
   const addToCart = (item) => {
-    setCart([...cart, item]);
+    setCart((prevCart) => [...prevCart, item]);
   };
 
   const removeFromCart = (itemToRemove) => {
-    setCart(cart.filter((item) => item.id !== itemToRemove.id));
+    setCart((prevCart) => {
+      const index = prevCart.findIndex((item) => item.id === itemToRemove.id);
+      if (index > -1) {
+        const newCart = [...prevCart];
+        newCart.splice(index, 1);
+        return newCart;
+      }
+      return prevCart;
+    });
   };
 
   const confirmOrder = async () => {
@@ -69,14 +79,19 @@ function App() {
     <>
       {step === 'landing' && <Landing onStartOrder={() => setStep('ordering')} />}
       {step === 'ordering' && (
-        <div className="container mx-auto p-4 flex">
-          <div className="w-2/3">
-            <Menu addToCart={addToCart} />
-            <VoiceInteraction setTranscript={setTranscript} />
+        <div className="flex flex-col h-screen">
+          <RobotFace isListening={isListening} />
+          <div className="flex-grow overflow-y-auto pb-24">
+            <div className="container mx-auto p-4 flex">
+              <div className="w-2/3">
+                <Menu addToCart={addToCart} />
+              </div>
+              <div className="w-1/3 pl-6">
+                <Cart cart={cart} removeFromCart={removeFromCart} onConfirmOrder={confirmOrder} />
+              </div>
+            </div>
           </div>
-          <div className="w-1/3">
-            <Cart cart={cart} removeFromCart={removeFromCart} onConfirmOrder={confirmOrder} />
-          </div>
+          <VoiceInteraction setTranscript={setTranscript} setIsListening={setIsListening} />
         </div>
       )}
       {step === 'confirmed' && <OrderConfirmation order={order} />}

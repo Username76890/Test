@@ -6,13 +6,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#3B82F6',
-        secondary: '#FBBF24',
-        background: '#F3F4F6',
-        text: '#1F2937',
+        primary: '#FF8C42', // Orange Accent
+        secondary: '#F4EDE4', // Cream Base
+        'mocha': '#A87C7C', // Mocha
+        'brown': '#6D4C41', // Brown
+        'teal': '#008080', // Teal
+        'text-dark': '#1F2937',
+        'text-light': '#FFFFFF',
       },
       fontFamily: {
-        sans: ['"Baloo 2"', 'cursive'],
+        sans: ['Poppins', 'sans-serif'],
       },
     },
   },
